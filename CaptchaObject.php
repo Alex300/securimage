@@ -6,7 +6,7 @@ class CaptchaObject
 {
     public $captchaId;
     public $captchaImageData;
-    public $captchaImageAudio;
+    public $captchaAudioData;
     public $creationTime;
     public $code;
     public $code_display;

@@ -614,7 +614,12 @@ class Securimage
      *
      * @var string
      */
-    protected $captcha_code;
+    protected $code_entered;
+
+    /**
+     * @var string
+     */
+    protected $correct_code;
 
     /**
      * Time (in seconds) that the captcha was solved in (correctly or incorrectly).
@@ -1380,7 +1385,7 @@ class Securimage
                 require_once dirname(__FILE__) . '/WavFile.php';
                 $audio = $this->getAudibleCode();
 
-                if (strtolower($format) == 'mp3') {
+                if (!empty($format) && strtolower($format) === 'mp3') {
                     $audio = $this->wavToMp3($audio);
                 }
 

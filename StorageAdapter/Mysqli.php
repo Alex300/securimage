@@ -50,7 +50,7 @@ class Mysqli implements AdapterInterface
             $info->code              = $code['code'];
             $info->code_display      = $code['code_display'];
             $info->creationTime      = (int)$code['created'];
-            $info->captchaImageAudio = $code['audio_data'];
+            $info->captchaAudioData = $code['audio_data'];
 
             return $info;
         }

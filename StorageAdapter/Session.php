@@ -17,33 +17,36 @@ class Session implements AdapterInterface
         $this->bootstrap();
     }
 
-    public function store($captchaId, $captchaInfo)
+    public function store($captchaId, $captchaInfo): bool
     {
         if ((function_exists('session_status') && PHP_SESSION_ACTIVE == session_status()) || session_id() != '') {
-            $_SESSION['securimage_data'][$captchaId] = $captchaInfo;
-
+            $_SESSION['securimage_data'][$captchaId] = serialize($captchaInfo);
             return true;
         }
 
         return false;
     }
 
-    public function storeAudioData($captchaId, $audioData)
+    public function storeAudioData($captchaId, $audioData): bool
     {
-        if (isset($_SESSION['securimage_data'][$captchaId]) &&
-            $_SESSION['securimage_data'][$captchaId] instanceof \Securimage\CaptchaObject
-        ) {
-            $_SESSION['securimage_data'][$captchaId]->captchaAudioData = $audioData;
-            return true;
+        $info = $this->get($captchaId);
+        if ($info === null) {
+            return false;
         }
 
-        return false;
+        $info->captchaAudioData = $audioData;
+        $this->store($captchaId, $info);
+        return true;
     }
 
-    public function get($captchaId, $what = null)
+    public function get($captchaId, $what = null): ?\Securimage\CaptchaObject
     {
         if (isset($_SESSION['securimage_data'][$captchaId])) {
-            return $_SESSION['securimage_data'][$captchaId];
+            $info = unserialize($_SESSION['securimage_data'][$captchaId]);
+            if (!($info instanceof \Securimage\CaptchaObject)) {
+                return null;
+            }
+            return $info;
         }
 
         return null;
