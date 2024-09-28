@@ -46,6 +46,8 @@
  *
  */
 
+use Securimage\StorageAdapter\AdapterInterface;
+
 
 /**
  * Securimage CAPTCHA Class.
@@ -648,9 +650,9 @@ class Securimage
     /**
      * List of storage adapters for persisting captcha data
      *
-     * @var array Array of one or more storage adapters
+     * @var list<AdapterInterface> Array of one or more storage adapters
      */
-    protected $storage_adapters = array();
+    protected $storage_adapters = [];
 
     /**
      * Flag indicating whether or not HTTP headers will be sent when outputting
@@ -2471,19 +2473,18 @@ class Securimage
 
     /**
      * Gets audio file contents from the session or database
-     *
-     * @return string|boolean Audio contents on success, or false if no audio found in session or DB
+     * @return ?string Audio contents on success, or NULL if no audio found in session or DB
      */
-    protected function getAudioData($captchaId)
+    protected function getAudioData($captchaId): ?string
     {
         foreach($this->storage_adapters as $adapter) {
             $info = $adapter->get($captchaId);
-            if ($info && !empty($info->captchaImageAudio)) {
-                return $info->captchaImageAudio;
+            if ($info && !empty($info->captchaAudioData)) {
+                return $info->captchaAudioData;
             }
         }
 
-        return false;
+        return null;
     }
 
     /**

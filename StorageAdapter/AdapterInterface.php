@@ -2,6 +2,8 @@
 
 namespace Securimage\StorageAdapter;
 
+use Securimage\CaptchaObject;
+
 interface AdapterInterface
 {
     /**
@@ -25,9 +27,9 @@ interface AdapterInterface
      *
      * @param string $captchaId The captcha ID to fetch info for
      * @param int    $what      What info to retrieve (e.g. code, image data, all)
-     * @return mixed false on failure, captcha info otherwise
+     * @return ?CaptchaObject NULL on failure, captcha info otherwise
      */
-    public function get($captchaId, $what = null);
+    public function get($captchaId, $what = null): ?CaptchaObject;
 
     /**
      * Delete captcha data from the store
