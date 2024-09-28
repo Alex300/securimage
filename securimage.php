@@ -684,6 +684,11 @@ class Securimage
     protected $gdsignaturecolor;
 
     /**
+     * @var int
+     */
+    protected $gdnoisecolor;
+
+    /**
      * Create a new securimage object, pass options to set in the constructor.
      *
      * The object can then be used to display a captcha, play an audible captcha, or validate a submission.
@@ -1451,7 +1456,7 @@ class Securimage
         $audioLength = $size = strlen($audio);
 
         if (isset($_SERVER['HTTP_RANGE'])) {
-            list( , $range) = explode('=', $_SERVER['HTTP_RANGE']); // bytes=byte-range-set
+            [ , $range] = explode('=', $_SERVER['HTTP_RANGE']); // bytes=byte-range-set
             $range = trim($range);
 
             if (strpos($range, ',') !== false) {
@@ -1981,11 +1986,11 @@ class Securimage
         $py       = array(); // y coordinates of poles
         $rad      = array(); // radius of distortion from pole
         $amp      = array(); // amplitude
-        $x        = ($this->image_width / 4); // lowest x coordinate of a pole
+        $x        = round($this->image_width / 4); // lowest x coordinate of a pole
         $maxX     = $this->image_width - $x;  // maximum x coordinate of a pole
-        $dx       = mt_rand($x / 10, $x);     // horizontal distance between poles
+        $dx       = mt_rand(round($x / 10), $x);     // horizontal distance between poles
         $y        = mt_rand(20, $this->image_height - 20);  // random y coord
-        $dy       = mt_rand(20, $this->image_height * 0.7); // y distance
+        $dy       = mt_rand(20, round($this->image_height * 0.7)); // y distance
         $minY     = 20;                                     // minimum y coordinate
         $maxY     = $this->image_height - 20;               // maximum y cooddinate
 
@@ -2018,7 +2023,7 @@ class Securimage
                     if ($r > $rad[$i]) {
                         continue;
                     }
-                    $rscale = $amp[$i] * sin(3.14 * $r / $rad[$i]);
+                    $rscale = round($amp[$i] * sin(3.14 * $r / $rad[$i]));
                     $x += $dx * $rscale;
                     $y += $dy * $rscale;
                 }
@@ -2043,11 +2048,11 @@ class Securimage
         for ($line = 0; $line < $this->num_lines; ++ $line) {
             $x = $this->image_width * (1 + $line) / ($this->num_lines + 1);
             $x += (0.5 - $this->frand()) * $this->image_width / $this->num_lines;
-            $y = mt_rand($this->image_height * 0.1, $this->image_height * 0.9);
+            $y = mt_rand(round($this->image_height * 0.1), $this->image_height * 0.9);
 
             $theta = ($this->frand() - 0.5) * M_PI * 0.33;
             $w = $this->image_width;
-            $len = mt_rand($w * 0.4, $w * 0.7);
+            $len = mt_rand(round($w * 0.4), round($w * 0.7));
             $lwid = mt_rand(0, 2);
 
             $k = $this->frand() * 0.6 + 0.2;
@@ -2065,8 +2070,8 @@ class Securimage
             $ldy = round($dx * $lwid);
 
             for ($i = 0; $i < $n; ++ $i) {
-                $x = $x0 + $i * $dx + $amp * $dy * sin($k * $i * $step + $phi);
-                $y = $y0 + $i * $dy - $amp * $dx * sin($k * $i * $step + $phi);
+                $x = round($x0 + $i * $dx + $amp * $dy * sin($k * $i * $step + $phi));
+                $y = round($y0 + $i * $dy - $amp * $dx * sin($k * $i * $step + $phi));
                 imagefilledrectangle($this->im, $x, $y, $x + $lwid, $y + $lwid, $this->gdlinecolor);
             }
         }
