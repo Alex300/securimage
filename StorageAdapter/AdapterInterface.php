@@ -29,7 +29,7 @@ interface AdapterInterface
      * @param int    $what      What info to retrieve (e.g. code, image data, all)
      * @return ?CaptchaObject NULL on failure, captcha info otherwise
      */
-    public function get($captchaId, $what = null): ?CaptchaObject;
+    public function get($captchaId, $what = null);
 
     /**
      * Delete captcha data from the store

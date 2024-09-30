@@ -17,7 +17,7 @@ class Session implements AdapterInterface
         $this->bootstrap();
     }
 
-    public function store($captchaId, $captchaInfo): bool
+    public function store($captchaId, $captchaInfo)
     {
         if ((function_exists('session_status') && PHP_SESSION_ACTIVE == session_status()) || session_id() != '') {
             $_SESSION['securimage_data'][$captchaId] = serialize($captchaInfo);
@@ -27,7 +27,7 @@ class Session implements AdapterInterface
         return false;
     }
 
-    public function storeAudioData($captchaId, $audioData): bool
+    public function storeAudioData($captchaId, $audioData)
     {
         $info = $this->get($captchaId);
         if ($info === null) {

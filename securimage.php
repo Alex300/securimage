@@ -1997,7 +1997,7 @@ class Securimage
         $maxX     = $this->image_width - $x;  // maximum x coordinate of a pole
         $dx       = mt_rand(round($x / 10), $x);     // horizontal distance between poles
         $y        = mt_rand(20, $this->image_height - 20);  // random y coord
-        $dy       = mt_rand(20, round($this->image_height * 0.7)); // y distance
+        $dy       = mt_rand(20, round($this->image_height * 0.7, 0)); // y distance
         $minY     = 20;                                     // minimum y coordinate
         $maxY     = $this->image_height - 20;               // maximum y cooddinate
 
@@ -2055,7 +2055,7 @@ class Securimage
         for ($line = 0; $line < $this->num_lines; ++ $line) {
             $x = $this->image_width * (1 + $line) / ($this->num_lines + 1);
             $x += (0.5 - $this->frand()) * $this->image_width / $this->num_lines;
-            $y = mt_rand(round($this->image_height * 0.1), $this->image_height * 0.9);
+            $y = mt_rand(floor($this->image_height * 0.1), floor($this->image_height * 0.9));
 
             $theta = ($this->frand() - 0.5) * M_PI * 0.33;
             $w = $this->image_width;
@@ -2475,7 +2475,7 @@ class Securimage
      * Gets audio file contents from the session or database
      * @return ?string Audio contents on success, or NULL if no audio found in session or DB
      */
-    protected function getAudioData($captchaId): ?string
+    protected function getAudioData($captchaId)
     {
         foreach($this->storage_adapters as $adapter) {
             $info = $adapter->get($captchaId);
